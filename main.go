@@ -16,8 +16,8 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 
-	application.Server.SetAPIRootPath("/api")
 	application.Server.Setup()
+	application.Server.SetAPIRootPath("/api")
 	application.Server.LoadSessionRoutes()
 	application.Server.LoadUserRoutes()
 	application.Server.LoadProductRoutes()

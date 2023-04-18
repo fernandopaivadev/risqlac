@@ -8,7 +8,7 @@ import (
 
 func (server *server) LoadStaticRoutes() {
 	server.Instance.Use(echoMiddleware.StaticWithConfig(echoMiddleware.StaticConfig{
-		Root:  "public",
+		Root:  "./frontend/dist",
 		Index: "index.html",
 		HTML5: true,
 	}))
