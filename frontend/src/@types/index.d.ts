@@ -24,7 +24,7 @@ export namespace APIRequest {
 export namespace Models {
 	interface User {
 		id: string
-		is_admin: boolean
+		is_admin: 0 | 1
 		name: string
 		password?: string
 		email: string

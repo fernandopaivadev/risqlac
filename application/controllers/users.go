@@ -13,9 +13,6 @@ type userController struct{}
 var User userController
 
 func (*userController) Create(context echo.Context) error {
-	headers := context.Request().Header
-	isAdmin := headers["Isadmin"][0] == "1"
-
 	var user models.User
 	err := context.Bind(&user)
 
@@ -24,10 +21,6 @@ func (*userController) Create(context echo.Context) error {
 			"message": "error parsing body",
 			"error":   err.Error(),
 		})
-	}
-
-	if !isAdmin {
-		user.IsAdmin = 0
 	}
 
 	err = services.Utils.ValidateStruct(user)

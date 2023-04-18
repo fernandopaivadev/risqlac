@@ -1,17 +1,17 @@
 import styled from "styled-components"
 
 const main = styled.div`
-	width: 100%;
+	width: 40rem;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	border-radius: 0.5rem;
-	background: var(--transparent);
+	background: var(--yellow);
 `
 
 const back = styled.button`
-	background: var(--transparent);
+	background: var(--yellow);
 	margin-left: 2rem;
 	border: none;
 	z-index: 1;

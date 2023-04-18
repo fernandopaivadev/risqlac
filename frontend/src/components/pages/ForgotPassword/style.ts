@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 const main = styled.div`
-	width: 80%;
+	width: 40rem;
 	position: absolute;
 	top: 50%;
 	left: 50%;

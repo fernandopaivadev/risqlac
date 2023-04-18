@@ -86,7 +86,7 @@ const Login: React.FC = () => {
 				>
 					<img
 						src={logo}
-						alt='Tech Amazon Logo'
+						alt='RisQLAC Logo'
 					/>
 					<styles.subtitle>
 						SOFTWARE DE CADASTRO DE PRODUTOS QUÍMICOS

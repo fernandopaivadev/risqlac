@@ -53,6 +53,7 @@ func (server *server) LoadUserRoutes() {
 		"/create",
 		controllers.User.Create,
 		Middleware.ValidateSessionToken,
+		Middleware.VerifyAdmin,
 	)
 	userRoutes.PUT(
 		"/update",

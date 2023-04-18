@@ -49,8 +49,8 @@ const User: React.FC = () => {
 					name: '',
 					email: '',
 					phone: '',
-					password: '',
-					is_admin: false
+					password: 'Labvir',
+					is_admin: 0
 				}
 
 				setUser(_user)
@@ -200,20 +200,16 @@ const User: React.FC = () => {
 				}
 
 				<styles.select
-					defaultValue={
-						userId ?
-							user?.is_admin ? 'admin' : 'student'
-							: 'student'
-					}
+					defaultValue={user?.is_admin}
 					onChange={event => {
 						user ?
-							user.is_admin = event.target.value === 'admin'
+							user.is_admin = Number(event.target.value)
 							: null
 					}}
 				>
 					<option></option>
-					<option value='student' defaultChecked>Aluno</option>
-					<option value='admin'>Professor/Técnico</option>
+					<option value='0' defaultChecked>Aluno</option>
+					<option value='1'>Professor/Técnico</option>
 				</styles.select>
 
 				<p className='error-message'>

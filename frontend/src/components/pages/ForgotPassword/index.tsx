@@ -54,7 +54,7 @@ const ForgotPassword: React.FC = () => {
 			<styles.logo>
 				<img
 					src={logo}
-					alt='Tech Amazon Logo'
+					alt='RisQLAC Logo'
 				/>
 			</styles.logo>
 

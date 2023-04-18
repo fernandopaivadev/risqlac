@@ -15,7 +15,7 @@ const Buttons: React.FC<Components.Buttons> = ({ buttons, header }) =>
 		>
 			<img
 				src={logo}
-				alt='Tech Amazon Logo'
+				alt='RisQLAC Logo'
 			/>
 		</styles.logo>
 

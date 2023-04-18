@@ -53,14 +53,8 @@ const ResetPassword: React.FC = () => {
 				<styles.logo>
 					<img
 						src={logo}
-						alt='Tech Amazon Logo'
+						alt='RisQLAC Logo'
 					/>
-					<styles.title>
-						Uirapuru
-					</styles.title>
-					<styles.subtitle>
-						SOFTWARE DE GESTÃO DE ENERGIA ELÉTRICA
-					</styles.subtitle>
 				</styles.logo>
 
 				{passwordChanged ?
