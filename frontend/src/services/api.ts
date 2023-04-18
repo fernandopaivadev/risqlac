@@ -4,7 +4,7 @@ import { APIRequest, Storage } from "../@types"
 import navigate from "../functions/navigate"
 import storage from "./storage"
 
-const baseURL = "http://localhost:3000/api"
+const baseURL = "https://risqlac.com.br/api"
 
 const Axios = axios.create({
 	baseURL,

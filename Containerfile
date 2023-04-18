@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM node:latest
 
 ENV APP_NAME=risqlac
 ENV CGO_ENABLED=1
@@ -19,6 +19,12 @@ COPY . .
 RUN export PATH=$PATH:/usr/local/go/bin && \
 	go mod tidy && \
 	go build -o $APP_NAME
+
+WORKDIR ./frontend
+RUN npm ci && \
+	npm run build
+
+WORKDIR ../
 
 EXPOSE 3000
 
