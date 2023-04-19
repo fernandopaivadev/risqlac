@@ -5,6 +5,7 @@ import (
 	"risqlac/application/services"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -194,5 +195,48 @@ func (*userController) Delete(context echo.Context) error {
 
 	return context.JSON(200, echo.Map{
 		"message": "user deleted",
+	})
+}
+
+func (*userController) RequestPasswordChange(context echo.Context) error {
+	email := context.QueryParam("email")
+
+	if email == "" {
+		return context.JSON(400, echo.Map{
+			"message": "validation error",
+			"error":   "user email is required",
+		})
+	}
+
+	user, err := services.User.GetByEmail(email)
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error retrieving user",
+			"error":   err.Error(),
+		})
+	}
+
+	passwordChangeCode := uuid.NewString()
+
+	err = services.Utils.SendEmail(
+		user.Name,
+		user.Email,
+		"Recuperação de senha",
+		"suporte@fernandopaiva.dev",
+		"Recuperação de senha",
+		"Seu token de recuperação de senha: "+passwordChangeCode,
+		"Seu token de recuperação de senha: "+passwordChangeCode,
+	)
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error sending email",
+			"error":   err.Error(),
+		})
+	}
+
+	return context.JSON(200, echo.Map{
+		"message": "email sent",
 	})
 }

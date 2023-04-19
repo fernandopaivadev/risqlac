@@ -1,12 +1,13 @@
 package services
 
 import (
+	"context"
+	"fmt"
 	"risqlac/environment"
+	"time"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/pkg/errors"
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"github.com/mailersend/mailersend-go"
 )
 
 type utilsService struct{}
@@ -21,28 +22,45 @@ func (*utilsService) ValidateStruct(data interface{}) error {
 func (*utilsService) SendEmail(
 	receiverName string,
 	receiverEmailAddress string,
+	senderName string,
+	senderEmailAddress string,
 	subject string,
 	plainTextContent string,
 	htmlContent string,
 ) error {
-	from := mail.NewEmail("RisQLAC", "risqlac@protonmail.com")
-	to := mail.NewEmail(receiverName, receiverEmailAddress)
+	sender := mailersend.NewMailersend(environment.Variables.MailerSendAPIToken)
 
-	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	from := mailersend.From{
+		Name:  senderName,
+		Email: senderEmailAddress,
+	}
 
-	client := sendgrid.NewSendClient(environment.Variables.SendgridApiKey)
+	recipients := []mailersend.Recipient{
+		{
+			Name:  receiverName,
+			Email: receiverEmailAddress,
+		},
+	}
 
-	response, err := client.Send(message)
+	message := sender.Email.NewMessage()
+
+	message.SetFrom(from)
+	message.SetRecipients(recipients)
+	message.SetSubject(subject)
+	message.SetHTML(htmlContent)
+	message.SetText(plainTextContent)
+
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	response, err := sender.Email.Send(ctx, message)
+
+	fmt.Println(response)
 
 	if err != nil {
 		return err
 	}
 
-	statusCode := response.StatusCode
-
-	if statusCode == 200 || statusCode == 201 || statusCode == 202 {
-		return nil
-	}
-
-	return errors.New("email not sent")
+	return nil
 }

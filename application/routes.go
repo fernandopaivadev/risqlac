@@ -70,6 +70,10 @@ func (server *server) LoadUserRoutes() {
 		controllers.User.Delete,
 		Middleware.ValidateSessionToken,
 	)
+	userRoutes.GET(
+		"/request-password-change",
+		controllers.User.RequestPasswordChange,
+	)
 }
 
 func (server *server) LoadProductRoutes() {
