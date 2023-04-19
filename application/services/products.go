@@ -20,7 +20,7 @@ func (*productService) Create(product models.Product) error {
 }
 
 func (*productService) Update(product models.Product) error {
-	result := infrastructure.Database.Instance.Model(&product).Select("*").Updates(models.Product{
+	result := infrastructure.Database.Instance.Model(&product).Updates(models.Product{
 		Name:            product.Name,
 		Synonym:         product.Synonym,
 		Class:           product.Class,
