@@ -1,9 +1,13 @@
 package controllers
 
 import (
+	"fmt"
+	"risqlac/application/models"
 	"risqlac/application/services"
 	"strconv"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -22,11 +26,28 @@ func (*sessionController) Login(context echo.Context) error {
 		})
 	}
 
-	token, err := services.User.GenerateSessionToken(email, password)
+	user, err := services.User.ValidateCredentials(email, password)
+
+	fmt.Println(user.Id)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
-			"message": "error generating session token",
+			"message": "error validating user credentials",
+			"error":   err.Error(),
+		})
+	}
+
+	token := uuid.NewString()
+
+	err = services.Session.Create(&models.Session{
+		Token:     token,
+		UserId:    user.Id,
+		ExpiresAt: time.Now().Add(24 * time.Hour),
+	})
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error creating session",
 			"error":   err.Error(),
 		})
 	}

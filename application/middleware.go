@@ -15,12 +15,12 @@ func (*middleware) ValidateSessionToken(next echo.HandlerFunc) echo.HandlerFunc 
 	return func(context echo.Context) error {
 		headers := context.Request().Header
 		token := headers["Authorization"][0]
-		user, err := services.User.ValidateSessionToken(token)
+		user, err := services.Session.ValidateToken(token)
 
 		if err != nil {
 			return context.JSON(401, echo.Map{
 				"message": "session token validation error",
-				"Error":   err.Error(),
+				"error":   err.Error(),
 			})
 		}
 
