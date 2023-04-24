@@ -15,12 +15,18 @@ func (*middleware) ValidateSessionToken(next echo.HandlerFunc) echo.HandlerFunc 
 	return func(context echo.Context) error {
 		headers := context.Request().Header
 		token := headers["Authorization"][0]
-		user, err := services.Session.ValidateToken(token)
+		session, user, err := services.Session.ValidateToken(token)
 
 		if err != nil {
 			return context.JSON(401, echo.Map{
 				"message": "session token validation error",
 				"error":   err.Error(),
+			})
+		}
+
+		if session.PasswordReset == 1 && context.Path() != "/api/user/reset-password" {
+			return context.JSON(403, echo.Map{
+				"message": "this token is only for password reset",
 			})
 		}
 

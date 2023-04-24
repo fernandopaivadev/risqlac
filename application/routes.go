@@ -63,13 +63,14 @@ func (server *server) LoadUserRoutes() {
 		Middleware.ValidateSessionToken,
 	)
 	userRoutes.GET(
-		"/request-password-change",
-		controllers.User.RequestPasswordChange,
+		"/request-password-reset",
+		controllers.User.RequestPasswordReset,
 	)
-	// userRoutes.PATCH(
-	// 	"/change-password",
-	// 	controllers.User.ChangePassword,
-	// )
+	userRoutes.PATCH(
+		"/reset-password",
+		controllers.User.ChangePassword,
+		Middleware.ValidateSessionToken,
+	)
 }
 
 func (server *server) LoadProductRoutes() {

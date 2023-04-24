@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"risqlac/application/models"
 	"risqlac/application/services"
 	"strconv"
@@ -27,8 +26,6 @@ func (*sessionController) Login(context echo.Context) error {
 	}
 
 	user, err := services.User.ValidateCredentials(email, password)
-
-	fmt.Println(user.Id)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
