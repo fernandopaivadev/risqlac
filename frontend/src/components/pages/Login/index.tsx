@@ -177,13 +177,13 @@ const Login: React.FC = () => {
 							}}>
 							Esqueci minha senha
 						</styles.link>
-						<styles.link
+						{/* <styles.link
 							data-testid='link'
 							onClick={() => {
 								navigate('/user')
 							}}>
-							Cadastre-se
-						</styles.link>
+							Entrar usando um link
+						</styles.link> */}
 					</>
 				}
 

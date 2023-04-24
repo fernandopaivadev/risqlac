@@ -91,7 +91,7 @@ const ResetPassword: React.FC = () => {
 								navigate('/login')
 							}}
 						>
-							FAZER LOGIN
+							Voltar ao login
 						</util.classicButton>
 						:
 						<util.classicButton
@@ -102,7 +102,7 @@ const ResetPassword: React.FC = () => {
 								submit()
 							}}
 						>
-							SALVAR
+							Enviar
 						</util.classicButton>
 				}
 

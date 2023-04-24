@@ -27,13 +27,9 @@ const ForgotPassword: React.FC = () => {
 			}
 		})
 
-		if (result?.status === 201) {
+		if (result?.status === 200) {
 			setLoading(false)
 			setEmailSent(true)
-		} else if (result?.status === 404) {
-			setErrorMessage('Usuário não encontrado')
-			setLoading(false)
-			setError(true)
 		} else {
 			setErrorMessage('Ocorreu um erro')
 			setLoading(false)
@@ -65,7 +61,7 @@ const ForgotPassword: React.FC = () => {
 				:
 				<>
 					<styles.label>
-						E-mail ou nome de usuário
+						Informe o e-mail
 					</styles.label>
 					<styles.input
 						required

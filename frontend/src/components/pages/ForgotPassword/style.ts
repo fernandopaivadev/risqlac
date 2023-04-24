@@ -63,17 +63,17 @@ const subtitle = styled.p`
 `
 
 const label = styled.label`
-	font-size: 1.6rem;
+	font-size: 2rem;
 	font-weight: 600;
 	color: var(--black);
-	width: 28rem;
+	width: 32rem;
 	text-align: left;
 	opacity: 1;
 `
 
 const input = styled.input`
 	margin: 0.5rem 0 1.5rem 0;
-	width: 28rem;
+	width: 32rem;
 	height: 5.5rem;
 	border-radius: 0.8rem;
 	border: none;

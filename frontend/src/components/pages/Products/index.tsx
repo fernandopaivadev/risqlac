@@ -191,9 +191,7 @@ const Products: React.FC = () => {
 					<p>Não há produtos cadastrados.</p>
 				</styles.noProduct>
 			:
-			<styles.loading
-				data-testid='loading'
-			>
+			<styles.loading>
 				<util.circularProgress />
 			</styles.loading>
 		}
