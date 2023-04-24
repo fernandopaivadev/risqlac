@@ -220,12 +220,8 @@ func (*userController) RequestPasswordChange(context echo.Context) error {
 	passwordChangeCode := uuid.NewString()
 
 	err = services.Utils.SendEmail(
-		user.Name,
 		user.Email,
 		"Recuperação de senha",
-		"suporte@fernandopaiva.dev",
-		"Recuperação de senha",
-		"Seu token de recuperação de senha: "+passwordChangeCode,
 		"Seu token de recuperação de senha: "+passwordChangeCode,
 	)
 

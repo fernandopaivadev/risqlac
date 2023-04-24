@@ -41,14 +41,6 @@ func (server *server) LoadSessionRoutes() {
 func (server *server) LoadUserRoutes() {
 	userRoutes := server.APIRootPath.Group("/user")
 
-	// userRoutes.GET(
-	// 	"/request-password-change",
-	// 	controllers.User.RequestPasswordChange,
-	// )
-	// userRoutes.GET(
-	// 	"/change-password",
-	// 	controllers.User.ChangePassword,
-	// )
 	userRoutes.POST(
 		"/create",
 		controllers.User.Create,
@@ -74,6 +66,10 @@ func (server *server) LoadUserRoutes() {
 		"/request-password-change",
 		controllers.User.RequestPasswordChange,
 	)
+	// userRoutes.PATCH(
+	// 	"/change-password",
+	// 	controllers.User.ChangePassword,
+	// )
 }
 
 func (server *server) LoadProductRoutes() {

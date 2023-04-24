@@ -1,13 +1,14 @@
 package services
 
 import (
-	"context"
-	"fmt"
+	"bytes"
+	"encoding/json"
+	"errors"
+	"io"
+	"net/http"
 	"risqlac/environment"
-	"time"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/mailersend/mailersend-go"
 )
 
 type utilsService struct{}
@@ -20,46 +21,44 @@ func (*utilsService) ValidateStruct(data interface{}) error {
 }
 
 func (*utilsService) SendEmail(
-	receiverName string,
-	receiverEmailAddress string,
-	senderName string,
-	senderEmailAddress string,
+	to string,
 	subject string,
-	plainTextContent string,
-	htmlContent string,
+	content string,
 ) error {
-	sender := mailersend.NewMailersend(environment.Variables.MailerSendAPIToken)
+	body, _ := json.Marshal(map[string]string{
+		"to":      to,
+		"subject": subject,
+		"body":    content,
+	})
 
-	from := mailersend.From{
-		Name:  senderName,
-		Email: senderEmailAddress,
-	}
-
-	recipients := []mailersend.Recipient{
-		{
-			Name:  receiverName,
-			Email: receiverEmailAddress,
-		},
-	}
-
-	message := sender.Email.NewMessage()
-
-	message.SetFrom(from)
-	message.SetRecipients(recipients)
-	message.SetSubject(subject)
-	message.SetHTML(htmlContent)
-	message.SetText(plainTextContent)
-
-	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
-
-	response, err := sender.Email.Send(ctx, message)
-
-	fmt.Println(response)
+	request, err := http.NewRequest(
+		"POST",
+		"https://api.useplunk.com/v1/send",
+		bytes.NewBuffer(body),
+	)
 
 	if err != nil {
 		return err
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set(
+		"Authorization", "Bearer "+environment.Variables.PlunkSecretAPIkey,
+	)
+
+	client := &http.Client{}
+
+	response, err := client.Do(request)
+
+	if err != nil {
+		return err
+	}
+
+	responseBodyBytes, _ := io.ReadAll(response.Body)
+	responseBodyString := string(responseBodyBytes)
+
+	if response.StatusCode != 200 {
+		return errors.New(responseBodyString)
 	}
 
 	return nil

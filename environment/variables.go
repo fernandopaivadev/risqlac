@@ -8,9 +8,9 @@ import (
 )
 
 type envVars struct {
-	ServerPort         string
-	DatabaseUrl        string
-	MailerSendAPIToken string
+	ServerPort        string
+	DatabaseUrl       string
+	PlunkSecretAPIkey string
 }
 
 var Variables envVars
@@ -26,5 +26,5 @@ func Load() {
 
 	Variables.ServerPort = os.Getenv("SERVER_PORT")
 	Variables.DatabaseUrl = os.Getenv("DATABASE_URL")
-	Variables.MailerSendAPIToken = os.Getenv("MAILER_SEND_API_TOKEN")
+	Variables.PlunkSecretAPIkey = os.Getenv("PLUNK_SECRET_API_KEY")
 }

@@ -8,7 +8,6 @@ require (
 	github.com/johnfercher/maroto v0.41.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.10.2
-	github.com/mailersend/mailersend-go v1.3.2
 	github.com/xuri/excelize/v2 v2.7.1
 	golang.org/x/crypto v0.8.0
 	gorm.io/driver/mysql v1.5.0
@@ -26,7 +25,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/jung-kurt/gofpdf v1.16.2 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/leodido/go-urn v1.2.3 // indirect
