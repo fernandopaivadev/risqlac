@@ -170,13 +170,13 @@ const Login: React.FC = () => {
 
 				{loading ? null :
 					<>
-						{/* <styles.link
-              data-testid='link'
-              onClick={() => {
-                navigate('/forgot-password')
-              }}>
-              Esqueci minha senha
-            </styles.link> */}
+						<styles.link
+							data-testid='link'
+							onClick={() => {
+								navigate('/forgot-password')
+							}}>
+							Esqueci minha senha
+						</styles.link>
 						<styles.link
 							data-testid='link'
 							onClick={() => {

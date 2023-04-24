@@ -6,6 +6,7 @@ import logo from '../../../assets/logo.png'
 import styles from './style'
 import util from '../../../utils/styles'
 import navigate from '../../../functions/navigate'
+import storage from '../../../services/storage'
 
 const ResetPassword: React.FC = () => {
 	const [error, setError] = useState(false)
@@ -21,14 +22,15 @@ const ResetPassword: React.FC = () => {
 		const token = window
 			.location
 			.href
-			.split('?token=')[1]
+			.split('?')[1]
+
+		storage.write('token', token as any)
 
 		const result = await api.request({
 			method: 'patch',
-			route: 'user/reset-password',
-			body: {
-				token,
-				password
+			route: '/user/reset-password',
+			query: {
+				new_password: password
 			}
 		})
 

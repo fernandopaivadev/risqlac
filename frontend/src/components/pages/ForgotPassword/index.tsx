@@ -21,7 +21,7 @@ const ForgotPassword: React.FC = () => {
 
 		const result = await api.request({
 			method: 'get',
-			route: '/user/forgot-password',
+			route: '/user/request-password-reset',
 			query: {
 				email
 			}

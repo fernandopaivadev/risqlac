@@ -234,7 +234,7 @@ func (*userController) RequestPasswordReset(context echo.Context) error {
 		UserId:        user.Id,
 		Token:         passwordChangeToken,
 		PasswordReset: 1,
-		ExpiresAt:     time.Now().Add(10 * time.Minute),
+		ExpiresAt:     time.Now().Add(5 * time.Minute),
 	})
 
 	if err != nil {
