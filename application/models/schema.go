@@ -5,12 +5,12 @@ import (
 )
 
 type Session struct {
-	Id        uint64    `json:"id" gorm:"unique; autoIncrement; primaryKey; <-:create"`
-	Token     string    `json:"token" gorm:"unique" validate:"required"`
-	UserId    uint64    `json:"user_id" validate:"required"`
-	ExpiresAt time.Time `json:"expires_at" validate:"required"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Id            uint64    `json:"id" gorm:"unique; autoIncrement; primaryKey; <-:create"`
+	Token         string    `json:"token" gorm:"unique" validate:"required"`
+	UserId        uint64    `json:"user_id" validate:"required"`
+	PasswordReset uint8     `json:"password_reset"`
+	ExpiresAt     time.Time `json:"expires_at" validate:"required"`
+	CreatedAt     time.Time `json:"created_at"`
 }
 
 type User struct {

@@ -8,8 +8,6 @@ require (
 	github.com/johnfercher/maroto v0.41.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.10.2
-	github.com/pkg/errors v0.9.1
-	github.com/sendgrid/sendgrid-go v3.12.0+incompatible
 	github.com/xuri/excelize/v2 v2.7.1
 	golang.org/x/crypto v0.8.0
 	gorm.io/driver/mysql v1.5.0
@@ -36,10 +34,9 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/ruudk/golang-pdf417 v0.0.0-20201230142125-a7e3863a1245 // indirect
-	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/xuri/efp v0.0.0-20230418022843-d151280498a4 // indirect
+	github.com/xuri/efp v0.0.0-20230422071738-01f4e37c47e9 // indirect
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect

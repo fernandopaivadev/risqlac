@@ -6,7 +6,7 @@ import (
 	"risqlac/environment"
 
 	"github.com/labstack/echo/v4"
-	echoMiddleware "github.com/labstack/echo/v4/middleware"
+	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 type server struct {
@@ -19,13 +19,13 @@ var Server server
 func (server *server) Setup() {
 	server.Instance = echo.New()
 
-	server.Instance.Use(echoMiddleware.Recover())
-	server.Instance.Use(echoMiddleware.Logger())
-	server.Instance.Use(echoMiddleware.RequestID())
-	server.Instance.Use(echoMiddleware.GzipWithConfig(echoMiddleware.GzipConfig{
+	server.Instance.Use(echomiddleware.Recover())
+	server.Instance.Use(echomiddleware.Logger())
+	server.Instance.Use(echomiddleware.RequestID())
+	server.Instance.Use(echomiddleware.GzipWithConfig(echomiddleware.GzipConfig{
 		Level: 5,
 	}))
-	server.Instance.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
+	server.Instance.Use(echomiddleware.CORSWithConfig(echomiddleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{
 			http.MethodGet,
@@ -43,7 +43,7 @@ func (server *server) Setup() {
 			echo.HeaderAuthorization,
 		},
 	}))
-	server.Instance.Use(echoMiddleware.SecureWithConfig(echoMiddleware.SecureConfig{
+	server.Instance.Use(echomiddleware.SecureWithConfig(echomiddleware.SecureConfig{
 		XSSProtection:      "1; mode=block",
 		XFrameOptions:      "deny",
 		ContentTypeNosniff: "nosniff",

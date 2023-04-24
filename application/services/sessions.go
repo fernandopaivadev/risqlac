@@ -1,8 +1,10 @@
 package services
 
 import (
+	"errors"
 	"risqlac/application/models"
 	"risqlac/infrastructure"
+	"time"
 )
 
 type sessionService struct{}
@@ -69,4 +71,25 @@ func (*sessionService) DeleteByUserId(userId uint64) error {
 	}
 
 	return nil
+}
+
+func (*sessionService) ValidateToken(token string) (models.Session, models.User, error) {
+	session, err := Session.GetByToken(token)
+
+	if err != nil {
+		return models.Session{}, models.User{}, err
+	}
+
+	if time.Now().Unix() > session.ExpiresAt.Unix() {
+		_ = Session.DeleteByToken(session.Token)
+		return models.Session{}, models.User{}, errors.New("token expired")
+	}
+
+	user, err := User.GetById(session.UserId)
+
+	if err != nil {
+		return models.Session{}, models.User{}, err
+	}
+
+	return session, user, nil
 }

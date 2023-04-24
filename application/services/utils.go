@@ -1,12 +1,14 @@
 package services
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"io"
+	"net/http"
 	"risqlac/environment"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/pkg/errors"
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 type utilsService struct{}
@@ -19,30 +21,45 @@ func (*utilsService) ValidateStruct(data interface{}) error {
 }
 
 func (*utilsService) SendEmail(
-	receiverName string,
-	receiverEmailAddress string,
+	to string,
 	subject string,
-	plainTextContent string,
-	htmlContent string,
+	content string,
 ) error {
-	from := mail.NewEmail("RisQLAC", "risqlac@protonmail.com")
-	to := mail.NewEmail(receiverName, receiverEmailAddress)
+	body, _ := json.Marshal(map[string]string{
+		"to":      to,
+		"subject": subject,
+		"body":    content,
+	})
 
-	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-
-	client := sendgrid.NewSendClient(environment.Variables.SendgridApiKey)
-
-	response, err := client.Send(message)
+	request, err := http.NewRequest(
+		"POST",
+		"https://api.useplunk.com/v1/send",
+		bytes.NewBuffer(body),
+	)
 
 	if err != nil {
 		return err
 	}
 
-	statusCode := response.StatusCode
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set(
+		"Authorization", "Bearer "+environment.Variables.PlunkSecretAPIkey,
+	)
 
-	if statusCode == 200 || statusCode == 201 || statusCode == 202 {
-		return nil
+	client := &http.Client{}
+
+	response, err := client.Do(request)
+
+	if err != nil {
+		return err
 	}
 
-	return errors.New("email not sent")
+	responseBodyBytes, _ := io.ReadAll(response.Body)
+	responseBodyString := string(responseBodyBytes)
+
+	if response.StatusCode != 200 {
+		return errors.New(responseBodyString)
+	}
+
+	return nil
 }

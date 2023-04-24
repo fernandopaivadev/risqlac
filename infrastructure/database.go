@@ -24,22 +24,16 @@ func (database *database) Connect() error {
 		return errors.New("failed to connect to the database")
 	}
 
-	err = db.AutoMigrate(&models.User{})
+	var errors []error
 
-	if err != nil {
-		return errors.New("Error migrating model => " + err.Error())
-	}
+	errors = append(errors, db.AutoMigrate(&models.User{}))
+	errors = append(errors, db.AutoMigrate(&models.Session{}))
+	errors = append(errors, db.AutoMigrate(&models.Product{}))
 
-	err = db.AutoMigrate(&models.Product{})
-
-	if err != nil {
-		return errors.New("Error migrating model => " + err.Error())
-	}
-
-	err = db.AutoMigrate(&models.Session{})
-
-	if err != nil {
-		return errors.New("Error migrating model => " + err.Error())
+	for _, err := range errors {
+		if err != nil {
+			return err
+		}
 	}
 
 	database.Instance = db

@@ -4,7 +4,9 @@ import (
 	"risqlac/application/models"
 	"risqlac/application/services"
 	"strconv"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,6 +32,10 @@ func (*userController) Create(context echo.Context) error {
 			"message": "validation error",
 			"error":   err.Error(),
 		})
+	}
+
+	if user.IsAdmin >= 1 {
+		user.IsAdmin = 1
 	}
 
 	err = services.User.Create(user)
@@ -82,6 +88,12 @@ func (*userController) Update(context echo.Context) error {
 			"message": "validation error",
 			"error":   err.Error(),
 		})
+	}
+
+	if isAdmin && user.IsAdmin >= 1 {
+		user.IsAdmin = 1
+	} else {
+		user.IsAdmin = 0
 	}
 
 	err = services.User.Update(user)
@@ -194,5 +206,94 @@ func (*userController) Delete(context echo.Context) error {
 
 	return context.JSON(200, echo.Map{
 		"message": "user deleted",
+	})
+}
+
+func (*userController) RequestPasswordReset(context echo.Context) error {
+	email := context.QueryParam("email")
+
+	if email == "" {
+		return context.JSON(400, echo.Map{
+			"message": "validation error",
+			"error":   "user email is required",
+		})
+	}
+
+	user, err := services.User.GetByEmail(email)
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error retrieving user",
+			"error":   err.Error(),
+		})
+	}
+
+	passwordChangeToken := uuid.NewString()
+
+	err = services.Session.Create(&models.Session{
+		UserId:        user.Id,
+		Token:         passwordChangeToken,
+		PasswordReset: 1,
+		ExpiresAt:     time.Now().Add(5 * time.Minute),
+	})
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error generating token",
+			"error":   err.Error(),
+		})
+	}
+
+	passwordResetUrl := "https://risqlac.com.br/#/reset-password?" + passwordChangeToken
+
+	err = services.Utils.SendEmail(
+		user.Email,
+		"Reset de senha",
+		"Link para o reset de senha: <a href=\""+passwordResetUrl+"\">"+passwordResetUrl+"</a>",
+	)
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error sending email",
+			"error":   err.Error(),
+		})
+	}
+
+	return context.JSON(200, echo.Map{
+		"message": "email sent",
+	})
+}
+
+func (*userController) ChangePassword(context echo.Context) error {
+	headers := context.Request().Header
+	tokenUserId, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error parsing token user id",
+			"error":   err.Error(),
+		})
+	}
+
+	newPassword := context.QueryParam("new_password")
+
+	if newPassword == "" {
+		return context.JSON(400, echo.Map{
+			"message": "validation error",
+			"error":   "new password is required",
+		})
+	}
+
+	err = services.User.ChangePassword(tokenUserId, newPassword)
+
+	if err != nil {
+		return context.JSON(500, echo.Map{
+			"message": "error changing password",
+			"error":   err.Error(),
+		})
+	}
+
+	return context.JSON(200, echo.Map{
+		"message": "password updated",
 	})
 }

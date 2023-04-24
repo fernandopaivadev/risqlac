@@ -1,12 +1,9 @@
 package services
 
 import (
-	"errors"
 	"risqlac/application/models"
 	"risqlac/infrastructure"
-	"time"
 
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,56 +11,17 @@ type userService struct{}
 
 var User userService
 
-func (service *userService) GenerateSessionToken(email string, password string) (string, error) {
-	var user models.User
-
+func (service *userService) ValidateCredentials(email string, password string) (models.User, error) {
 	user, err := service.GetByEmail(email)
 
 	if err != nil {
-		return "", err
+		return models.User{}, err
 	}
 
 	err = bcrypt.CompareHashAndPassword(
 		[]byte(user.Password),
 		[]byte(password),
 	)
-
-	if err != nil {
-		return "", err
-	}
-
-	token := uuid.NewString()
-
-	err = Session.Create(&models.Session{
-		Token:     token,
-		UserId:    user.Id,
-		ExpiresAt: time.Now().Add(24 * time.Hour),
-	})
-
-	if err != nil {
-		return "", err
-	}
-
-	return token, nil
-}
-
-func (*userService) ValidateSessionToken(token string) (models.User, error) {
-	var session models.Session
-
-	session, err := Session.GetByToken(token)
-
-	if err != nil {
-		return models.User{}, err
-	}
-
-	if time.Now().Unix() > session.ExpiresAt.Unix() {
-		_ = Session.DeleteByToken(session.Token)
-		return models.User{}, errors.New("token expired")
-	}
-
-	var user models.User
-
-	user, err = User.GetById(session.UserId)
 
 	if err != nil {
 		return models.User{}, err
