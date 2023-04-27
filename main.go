@@ -17,12 +17,8 @@ func main() {
 	}
 
 	application.Server.Setup()
-	application.Server.SetAPIRootPath("/api")
-	application.Server.LoadSessionRoutes()
-	application.Server.LoadUserRoutes()
-	application.Server.LoadProductRoutes()
-	application.Server.LoadReportRoutes()
-	application.Server.LoadStaticRoutes()
+	application.Server.LoadApiRoutes("/api")
+	application.Server.LoadAppRoutes("")
 
 	err = application.Server.Start()
 

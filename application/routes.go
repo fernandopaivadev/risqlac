@@ -6,17 +6,10 @@ import (
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
-func (server *server) LoadStaticRoutes() {
-	server.Instance.Use(echoMiddleware.StaticWithConfig(echoMiddleware.StaticConfig{
-		Root:  "./frontend/dist",
-		Index: "index.html",
-		HTML5: true,
-	}))
-}
+func (server *server) LoadApiRoutes(path string) {
+	server.setApiRootPath(path)
 
-func (server *server) LoadSessionRoutes() {
-	sessionRoutes := server.APIRootPath.Group("/session")
-
+	sessionRoutes := server.apiRootPath.Group("/session")
 	sessionRoutes.GET(
 		"/login",
 		controllers.Session.Login,
@@ -36,11 +29,8 @@ func (server *server) LoadSessionRoutes() {
 		controllers.Session.CompleteLogout,
 		Middleware.ValidateSessionToken,
 	)
-}
 
-func (server *server) LoadUserRoutes() {
-	userRoutes := server.APIRootPath.Group("/user")
-
+	userRoutes := server.apiRootPath.Group("/user")
 	userRoutes.POST(
 		"/create",
 		controllers.User.Create,
@@ -71,11 +61,8 @@ func (server *server) LoadUserRoutes() {
 		controllers.User.ChangePassword,
 		Middleware.ValidateSessionToken,
 	)
-}
 
-func (server *server) LoadProductRoutes() {
-	productRoutes := server.APIRootPath.Group("/product")
-
+	productRoutes := server.apiRootPath.Group("/product")
 	productRoutes.POST(
 		"/create",
 		controllers.Product.Create,
@@ -99,11 +86,8 @@ func (server *server) LoadProductRoutes() {
 		Middleware.ValidateSessionToken,
 		Middleware.VerifyAdmin,
 	)
-}
 
-func (server *server) LoadReportRoutes() {
-	reportRoutes := server.APIRootPath.Group("/report")
-
+	reportRoutes := server.apiRootPath.Group("/report")
 	reportRoutes.GET(
 		"/products/pdf",
 		controllers.Report.GetProductsReportPDF,
@@ -119,4 +103,14 @@ func (server *server) LoadReportRoutes() {
 		controllers.Report.GetProductsReportXLSX,
 		Middleware.ValidateSessionToken,
 	)
+}
+
+func (server *server) LoadAppRoutes(path string) {
+	server.setAppRootPath(path)
+
+	server.instance.Use(echoMiddleware.StaticWithConfig(echoMiddleware.StaticConfig{
+		Root:  "./frontend/dist",
+		Index: "index.html",
+		HTML5: true,
+	}))
 }
