@@ -1,8 +1,8 @@
-FROM node:latest
+FROM node:lts-bullseye-slim
 
 ENV APP_NAME=risqlac
 ENV CGO_ENABLED=1
-ENV GO_VERSION=1.20.3
+ENV GO_VERSION=1.20.4
 
 RUN apt update -y && \
 	apt install -y tar && \
