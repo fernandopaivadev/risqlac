@@ -1,8 +1,10 @@
-echo "==> stop all containers"
-podman stop -a
+APP_NAME="risqlac"
 
-echo "==> prune containers"
-podman container prune -f
+echo "==> stop container"
+sudo docker stop $APP_NAME
 
-echo "==> prune images"
-podman image prune -f
+echo "==> prune container"
+sudo docker rm $APP_NAME
+
+echo "==> prune image"
+sudo docker rmi $APP_NAME
