@@ -1,17 +1,17 @@
 module risqlac
 
-go 1.20
+go 1.21
 
 require (
-	github.com/go-playground/validator/v10 v10.12.0
-	github.com/google/uuid v1.3.0
-	github.com/johnfercher/maroto v0.41.0
+	github.com/go-playground/validator/v10 v10.15.5
+	github.com/google/uuid v1.3.1
+	github.com/johnfercher/maroto v1.0.0
 	github.com/joho/godotenv v1.5.1
-	github.com/labstack/echo/v4 v4.10.2
-	github.com/xuri/excelize/v2 v2.7.1
-	golang.org/x/crypto v0.8.0
-	gorm.io/driver/mysql v1.5.0
-	gorm.io/gorm v1.25.0
+	github.com/labstack/echo/v4 v4.11.2
+	github.com/xuri/excelize/v2 v2.8.0
+	golang.org/x/crypto v0.14.0
+	gorm.io/driver/mysql v1.5.2
+	gorm.io/gorm v1.25.5
 )
 
 require (
@@ -21,25 +21,26 @@ require (
 
 require (
 	github.com/boombuler/barcode v1.0.1 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/jung-kurt/gofpdf v1.16.2 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
-	github.com/leodido/go-urn v1.2.3 // indirect
+	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.18 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/ruudk/golang-pdf417 v0.0.0-20201230142125-a7e3863a1245 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/xuri/efp v0.0.0-20230422071738-01f4e37c47e9 // indirect
-	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
-	golang.org/x/net v0.9.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	github.com/xuri/efp v0.0.0-20230802181842-ad255f2331ca // indirect
+	github.com/xuri/nfp v0.0.0-20230919160717-d98342af3f05 // indirect
+	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 )
