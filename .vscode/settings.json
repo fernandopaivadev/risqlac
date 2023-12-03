@@ -15,7 +15,6 @@
 	"files.autoSave": "onFocusChange",
 
 	"workbench.editor.highlightModifiedTabs": true,
-	"workbench.activityBar.visible": true,
 	"workbench.list.openMode": "singleClick",
 	"editor.rulers": [
 		{
