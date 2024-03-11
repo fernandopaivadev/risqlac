@@ -2,8 +2,8 @@ package services
 
 import (
 	"errors"
-	"risqlac/application/models"
-	"risqlac/infrastructure"
+	"main/infra"
+	"main/models"
 	"time"
 )
 
@@ -12,7 +12,7 @@ type sessionService struct{}
 var Session sessionService
 
 func (*sessionService) Create(session *models.Session) error {
-	result := infrastructure.Database.Instance.Create(&session)
+	result := infra.Database.Instance.Create(&session)
 
 	if result.Error != nil {
 		return result.Error
@@ -24,7 +24,7 @@ func (*sessionService) Create(session *models.Session) error {
 func (*sessionService) GetByToken(token string) (models.Session, error) {
 	var session models.Session
 
-	result := infrastructure.Database.Instance.Where(&models.Session{
+	result := infra.Database.Instance.Where(&models.Session{
 		Token: token,
 	}).First(&session)
 
@@ -35,11 +35,11 @@ func (*sessionService) GetByToken(token string) (models.Session, error) {
 	return session, nil
 }
 
-func (*sessionService) GetByUserId(userId uint64) ([]models.Session, error) {
+func (*sessionService) GetByUserID(userID uint64) ([]models.Session, error) {
 	var sessions []models.Session
 
-	result := infrastructure.Database.Instance.Where(&models.Session{
-		UserId: userId,
+	result := infra.Database.Instance.Where(&models.Session{
+		UserID: userID,
 	}).Find(&sessions)
 
 	if result.Error != nil {
@@ -50,7 +50,7 @@ func (*sessionService) GetByUserId(userId uint64) ([]models.Session, error) {
 }
 
 func (*sessionService) DeleteByToken(token string) error {
-	result := infrastructure.Database.Instance.Where(&models.Session{
+	result := infra.Database.Instance.Where(&models.Session{
 		Token: token,
 	}).Delete(&models.Session{})
 
@@ -61,9 +61,9 @@ func (*sessionService) DeleteByToken(token string) error {
 	return nil
 }
 
-func (*sessionService) DeleteByUserId(userId uint64) error {
-	result := infrastructure.Database.Instance.Where(&models.Session{
-		UserId: userId,
+func (*sessionService) DeleteByUserID(userID uint64) error {
+	result := infra.Database.Instance.Where(&models.Session{
+		UserID: userID,
 	}).Delete(&models.Session{})
 
 	if result.Error != nil {
@@ -85,7 +85,7 @@ func (*sessionService) ValidateToken(token string) (models.Session, models.User,
 		return models.Session{}, models.User{}, errors.New("token expired")
 	}
 
-	user, err := User.GetById(session.UserId)
+	user, err := User.GetByID(session.UserID)
 
 	if err != nil {
 		return models.Session{}, models.User{}, err

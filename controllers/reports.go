@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"risqlac/application/services"
+	"main/services"
 
 	"github.com/labstack/echo/v4"
 )

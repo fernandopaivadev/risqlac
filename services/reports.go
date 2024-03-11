@@ -5,8 +5,8 @@ import (
 	"encoding/base64"
 	"encoding/csv"
 	"log"
-	"risqlac/application/assets"
-	"risqlac/application/models"
+	"main/assets"
+	"main/models"
 	"strconv"
 	"time"
 
@@ -20,7 +20,7 @@ type reportService struct{}
 
 var Report reportService
 
-func makeItem(maroto pdf.Maroto, title string, content string) {
+func makeItem(maroto pdf.Maroto, title, content string) {
 	maroto.Row(5, func() {
 		maroto.Col(3, func() {
 			maroto.Text(title, props.Text{
@@ -206,7 +206,7 @@ func (*reportService) GetProductsReportXLSX(products []models.Product) ([]byte, 
 	for i := range rows {
 		cell := "A" + strconv.Itoa(i+1)
 
-		err := file.SetSheetRow(sheetName, cell, &rows[i])
+		err = file.SetSheetRow(sheetName, cell, &rows[i])
 
 		if err != nil {
 			return nil, err

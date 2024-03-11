@@ -1,23 +1,23 @@
-package application
+package server
 
 import (
 	"errors"
+	"main/config"
 	"net/http"
-	"risqlac/environment"
 
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
 
-type server struct {
+type httpServer struct {
 	instance    *echo.Echo
 	apiRootPath *echo.Group
 	appRootPath *echo.Group
 }
 
-var Server server
+var HTTPServer httpServer
 
-func (server *server) Setup() {
+func (server *httpServer) Setup() {
 	server.instance = echo.New()
 
 	server.instance.Use(echomiddleware.Recover())
@@ -51,8 +51,8 @@ func (server *server) Setup() {
 	}))
 }
 
-func (server *server) Start() error {
-	serverPort := ":" + environment.Variables.ServerPort
+func (server *httpServer) Start() error {
+	serverPort := ":" + config.Env.ServerPort
 
 	err := server.instance.Start(serverPort)
 
@@ -63,10 +63,10 @@ func (server *server) Start() error {
 	return nil
 }
 
-func (server *server) setApiRootPath(path string) {
+func (server *httpServer) setAPIRootPath(path string) {
 	server.apiRootPath = server.instance.Group(path)
 }
 
-func (server *server) setAppRootPath(path string) {
+func (server *httpServer) setAppRootPath(path string) {
 	server.appRootPath = server.instance.Group(path)
 }

@@ -6,22 +6,19 @@
 	"editor.formatOnSave": true,
 	"editor.renderWhitespace": "boundary",
 	"editor.linkedEditing": true,
-
-	"editor.cursorStyle": "block",
-	"editor.cursorBlinking": "smooth",
-	"editor.cursorSmoothCaretAnimation": "on",
-
+	"editor.cursorStyle": "line",
 	"explorer.sortOrder": "type",
+	"editor.rulers": [
+		{
+			"column": 80,
+			"color": "#aa0000"
+		}
+	],
+
 	"files.autoSave": "onFocusChange",
 
 	"workbench.editor.highlightModifiedTabs": true,
 	"workbench.list.openMode": "singleClick",
-	"editor.rulers": [
-		{
-			"column": 80,
-			"color": "#0055aa"
-		}
-	],
 
 	"terminal.integrated.profiles.windows": {
 		"Git Bash": {
@@ -29,7 +26,15 @@
 		}
 	},
 	"terminal.integrated.defaultProfile.windows": "Git Bash",
-	"terminal.integrated.defaultProfile.linux": "bash",
+	"terminal.integrated.defaultProfile.linux": "zsh",
 	"terminal.integrated.fontFamily": "Fira Code",
-	"terminal.integrated.smoothScrolling": true
+
+	"go.lintTool": "golangci-lint",
+	"go.lintFlags": ["--fast"],
+	"[yaml]": {
+		"editor.defaultFormatter": "redhat.vscode-yaml"
+	},
+	"[go]": {
+		"editor.defaultFormatter": "golang.go"
+	}
 }

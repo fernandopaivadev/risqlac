@@ -1,16 +1,16 @@
 package services
 
 import (
-	"risqlac/application/models"
-	"risqlac/infrastructure"
+	"main/infra"
+	"main/models"
 )
 
 type productService struct{}
 
 var Product productService
 
-func (*productService) Create(product models.Product) error {
-	result := infrastructure.Database.Instance.Create(&product)
+func (*productService) Create(product *models.Product) error {
+	result := infra.Database.Instance.Create(&product)
 
 	if result.Error != nil {
 		return result.Error
@@ -19,8 +19,8 @@ func (*productService) Create(product models.Product) error {
 	return nil
 }
 
-func (*productService) Update(product models.Product) error {
-	result := infrastructure.Database.Instance.Model(&product).Updates(models.Product{
+func (*productService) Update(product *models.Product) error {
+	result := infra.Database.Instance.Model(&product).Updates(models.Product{
 		Name:            product.Name,
 		Synonym:         product.Synonym,
 		Class:           product.Class,
@@ -42,10 +42,10 @@ func (*productService) Update(product models.Product) error {
 	return nil
 }
 
-func (*productService) GetById(productId uint64) (models.Product, error) {
+func (*productService) GetByID(productID uint64) (models.Product, error) {
 	var product models.Product
 
-	result := infrastructure.Database.Instance.First(&product, productId)
+	result := infra.Database.Instance.First(&product, productID)
 
 	if result.Error != nil {
 		return models.Product{}, result.Error
@@ -57,7 +57,7 @@ func (*productService) GetById(productId uint64) (models.Product, error) {
 func (*productService) List() ([]models.Product, error) {
 	var products []models.Product
 
-	result := infrastructure.Database.Instance.Find(&products)
+	result := infra.Database.Instance.Find(&products)
 
 	if result.Error != nil {
 		return []models.Product{}, result.Error
@@ -66,8 +66,8 @@ func (*productService) List() ([]models.Product, error) {
 	return products, nil
 }
 
-func (*productService) Delete(productId uint64) error {
-	result := infrastructure.Database.Instance.Delete(&models.Product{}, productId)
+func (*productService) Delete(productID uint64) error {
+	result := infra.Database.Instance.Delete(&models.Product{}, productID)
 
 	if result.Error != nil {
 		return result.Error

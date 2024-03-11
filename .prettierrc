@@ -1,5 +1,16 @@
 {
-	"semi": false,
-	"singleQuote": false,
-	"trailingComma": "all"
+    "semi": false,
+    "singleQuote": false,
+    "trailingComma": "none",
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "jsxSingleQuote": false,
+    "tabWidth": 4,
+    "bracketSameLine": false,
+    "embeddedLanguageFormatting": "off",
+    "useTabs": true,
+    "printWidth": 80,
+    "quoteProps": "consistent",
+    "endOfLine": "lf",
+    "editorconfig": true
 }

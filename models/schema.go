@@ -5,16 +5,16 @@ import (
 )
 
 type Session struct {
-	Id            uint64    `json:"id" gorm:"unique; autoIncrement; primaryKey; <-:create"`
+	ID            uint64    `json:"id" gorm:"unique; autoIncrement; primaryKey; <-:create"`
 	Token         string    `json:"token" gorm:"unique" validate:"required"`
-	UserId        uint64    `json:"user_id" validate:"required"`
+	UserID        uint64    `json:"user_id" validate:"required"`
 	PasswordReset uint8     `json:"password_reset"`
 	ExpiresAt     time.Time `json:"expires_at" validate:"required"`
 	CreatedAt     time.Time `json:"created_at"`
 }
 
 type User struct {
-	Id        uint64    `json:"id" gorm:"unique; autoIncrement; primaryKey; <-:create"`
+	ID        uint64    `json:"id" gorm:"unique; autoIncrement; primaryKey; <-:create"`
 	Email     string    `json:"email" gorm:"unique" validate:"required,email"`
 	Name      string    `json:"name" validate:"required"`
 	Phone     string    `json:"phone" validate:"required"`
@@ -25,7 +25,7 @@ type User struct {
 }
 
 type Product struct {
-	Id              uint64    `json:"id" gorm:"autoIncrement; primaryKey; <-:create"`
+	ID              uint64    `json:"id" gorm:"autoIncrement; primaryKey; <-:create"`
 	Synonym         string    `json:"synonym" validate:"required"`
 	Class           string    `json:"class" validate:"required"`
 	Subclass        string    `json:"subclass" validate:"required"`

@@ -1,30 +1,33 @@
-FROM node:lts-bullseye-slim
+ARG APP_NAME=risqlac
 
-ENV APP_NAME=risqlac
-ENV CGO_ENABLED=1
-ENV GO_VERSION=1.21.3
+FROM node:latest as build
 
-RUN apt update -y && \
-	apt install -y tar && \
-	apt install -y wget && \
-	apt install -y gcc && \
-	wget https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz && \
-	tar -C /usr/local -xzf go$GO_VERSION.linux-amd64.tar.gz && \
-	export PATH=$PATH:/usr/local/go/bin && \
-	go version
-
-WORKDIR /usr/server/$APP_NAME
+WORKDIR /usr/app
 COPY . .
 
-RUN export PATH=$PATH:/usr/local/go/bin && \
-	go mod tidy && \
-	go build -o $APP_NAME
-
-WORKDIR ./frontend
+WORKDIR /usr/app/frontend
 RUN npm ci && \
 	npm run build
 
-WORKDIR ../
+FROM golang:latest as compile
+
+ARG APP_NAME
+ENV APP_NAME=$APP_NAME
+ENV CGO_ENABLED=1
+
+COPY --from=build /usr/app /usr/app
+WORKDIR /usr/app
+
+RUN	go mod download && \
+	go build -o $APP_NAME
+
+FROM busybox:latest
+
+ARG APP_NAME
+ENV APP_NAME=$APP_NAME
+
+COPY --from=compile /usr/app /usr/app
+WORKDIR /usr/app
 
 EXPOSE 3000
 

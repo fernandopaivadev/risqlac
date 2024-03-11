@@ -1,13 +1,14 @@
-package application
+package server
 
 import (
-	"risqlac/application/controllers"
+	"main/controllers"
+	"main/middleware"
 
-	echoMiddleware "github.com/labstack/echo/v4/middleware"
+	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
 
-func (server *server) LoadApiRoutes(path string) {
-	server.setApiRootPath(path)
+func (server *httpServer) LoadAPIRoutes(path string) {
+	server.setAPIRootPath(path)
 
 	sessionRoutes := server.apiRootPath.Group("/session")
 	sessionRoutes.GET(
@@ -17,40 +18,40 @@ func (server *server) LoadApiRoutes(path string) {
 	sessionRoutes.GET(
 		"/list",
 		controllers.Session.List,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	sessionRoutes.DELETE(
 		"/logout",
 		controllers.Session.Logout,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	sessionRoutes.DELETE(
 		"/complete-logout",
 		controllers.Session.CompleteLogout,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 
 	userRoutes := server.apiRootPath.Group("/user")
 	userRoutes.POST(
 		"/create",
 		controllers.User.Create,
-		Middleware.ValidateSessionToken,
-		Middleware.VerifyAdmin,
+		middleware.Auth.ValidateSessionToken,
+		middleware.Auth.VerifyAdmin,
 	)
 	userRoutes.PUT(
 		"/update",
 		controllers.User.Update,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	userRoutes.GET(
 		"/list",
 		controllers.User.List,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	userRoutes.DELETE(
 		"/delete",
 		controllers.User.Delete,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	userRoutes.GET(
 		"/request-password-reset",
@@ -59,56 +60,56 @@ func (server *server) LoadApiRoutes(path string) {
 	userRoutes.PATCH(
 		"/reset-password",
 		controllers.User.ChangePassword,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 
 	productRoutes := server.apiRootPath.Group("/product")
 	productRoutes.POST(
 		"/create",
 		controllers.Product.Create,
-		Middleware.ValidateSessionToken,
-		Middleware.VerifyAdmin,
+		middleware.Auth.ValidateSessionToken,
+		middleware.Auth.VerifyAdmin,
 	)
 	productRoutes.PUT(
 		"/update",
 		controllers.Product.Update,
-		Middleware.ValidateSessionToken,
-		Middleware.VerifyAdmin,
+		middleware.Auth.ValidateSessionToken,
+		middleware.Auth.VerifyAdmin,
 	)
 	productRoutes.GET(
 		"/list",
 		controllers.Product.List,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	productRoutes.DELETE(
 		"/delete",
 		controllers.Product.Delete,
-		Middleware.ValidateSessionToken,
-		Middleware.VerifyAdmin,
+		middleware.Auth.ValidateSessionToken,
+		middleware.Auth.VerifyAdmin,
 	)
 
 	reportRoutes := server.apiRootPath.Group("/report")
 	reportRoutes.GET(
 		"/products/pdf",
 		controllers.Report.GetProductsReportPDF,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	reportRoutes.GET(
 		"/products/csv",
 		controllers.Report.GetProductsReportCSV,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 	reportRoutes.GET(
 		"/products/xlsx",
 		controllers.Report.GetProductsReportXLSX,
-		Middleware.ValidateSessionToken,
+		middleware.Auth.ValidateSessionToken,
 	)
 }
 
-func (server *server) LoadAppRoutes(path string) {
+func (server *httpServer) LoadAppRoutes(path string) {
 	server.setAppRootPath(path)
 
-	server.instance.Use(echoMiddleware.StaticWithConfig(echoMiddleware.StaticConfig{
+	server.instance.Use(echomiddleware.StaticWithConfig(echomiddleware.StaticConfig{
 		Root:  "./frontend/dist",
 		Index: "index.html",
 		HTML5: true,

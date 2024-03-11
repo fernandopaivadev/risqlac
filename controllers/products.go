@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"risqlac/application/models"
-	"risqlac/application/services"
+	"main/models"
+	"main/services"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -32,7 +32,7 @@ func (*productController) Create(context echo.Context) error {
 		})
 	}
 
-	err = services.Product.Create(product)
+	err = services.Product.Create(&product)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -66,7 +66,7 @@ func (*productController) Update(context echo.Context) error {
 		})
 	}
 
-	err = services.Product.Update(product)
+	err = services.Product.Update(&product)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -81,10 +81,10 @@ func (*productController) Update(context echo.Context) error {
 }
 
 func (*productController) List(context echo.Context) error {
-	productId, _ := strconv.ParseUint(context.QueryParam("id"), 10, 64)
+	productID, _ := strconv.ParseUint(context.QueryParam("id"), 10, 64)
 
-	if productId != 0 {
-		product, err := services.Product.GetById(productId)
+	if productID != 0 {
+		product, err := services.Product.GetByID(productID)
 
 		if err != nil {
 			return context.JSON(500, echo.Map{
@@ -113,7 +113,7 @@ func (*productController) List(context echo.Context) error {
 }
 
 func (*productController) Delete(context echo.Context) error {
-	productId, err := strconv.ParseUint(context.QueryParam("id"), 10, 64)
+	productID, err := strconv.ParseUint(context.QueryParam("id"), 10, 64)
 
 	if err != nil {
 		return context.JSON(400, echo.Map{
@@ -122,7 +122,7 @@ func (*productController) Delete(context echo.Context) error {
 		})
 	}
 
-	err = services.Product.Delete(productId)
+	err = services.Product.Delete(productID)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{

@@ -1,8 +1,0 @@
-version: "3"
-services:
-    risqlac:
-        image: fernandopaivadev/risqlac
-        container_name: risqlac
-        ports:
-            - "3001:3000"
-        restart: unless-stopped

@@ -1,17 +1,17 @@
-package application
+package middleware
 
 import (
-	"fmt"
-	"risqlac/application/services"
+	"main/services"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-type middleware struct{}
+type auth struct{}
 
-var Middleware middleware
+var Auth auth
 
-func (*middleware) ValidateSessionToken(next echo.HandlerFunc) echo.HandlerFunc {
+func (*auth) ValidateSessionToken(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(context echo.Context) error {
 		headers := context.Request().Header
 		token := headers["Authorization"][0]
@@ -30,14 +30,14 @@ func (*middleware) ValidateSessionToken(next echo.HandlerFunc) echo.HandlerFunc 
 			})
 		}
 
-		context.Request().Header.Add("UserId", fmt.Sprint(user.Id))
-		context.Request().Header.Add("IsAdmin", fmt.Sprint(user.IsAdmin))
+		context.Request().Header.Add("UserId", strconv.FormatUint(user.ID, 10))
+		context.Request().Header.Add("IsAdmin", strconv.FormatBool(user.IsAdmin > 0))
 
 		return next(context)
 	}
 }
 
-func (*middleware) VerifyAdmin(next echo.HandlerFunc) echo.HandlerFunc {
+func (*auth) VerifyAdmin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(context echo.Context) error {
 		headers := context.Request().Header
 		isAdmin := headers["Isadmin"][0] == "1"

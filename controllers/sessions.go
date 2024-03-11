@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"risqlac/application/models"
-	"risqlac/application/services"
+	"main/models"
+	"main/services"
 	"strconv"
 	"time"
 
@@ -38,7 +38,7 @@ func (*sessionController) Login(context echo.Context) error {
 
 	err = services.Session.Create(&models.Session{
 		Token:     token,
-		UserId:    user.Id,
+		UserID:    user.ID,
 		ExpiresAt: time.Now().Add(24 * time.Hour),
 	})
 
@@ -56,7 +56,7 @@ func (*sessionController) Login(context echo.Context) error {
 
 func (*sessionController) List(context echo.Context) error {
 	headers := context.Request().Header
-	tokenUserId, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
+	tokenUserID, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -65,7 +65,7 @@ func (*sessionController) List(context echo.Context) error {
 		})
 	}
 
-	sessions, err := services.Session.GetByUserId(tokenUserId)
+	sessions, err := services.Session.GetByUserID(tokenUserID)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -99,7 +99,7 @@ func (*sessionController) Logout(context echo.Context) error {
 
 func (*sessionController) CompleteLogout(context echo.Context) error {
 	headers := context.Request().Header
-	tokenUserId, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
+	tokenUserID, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -108,7 +108,7 @@ func (*sessionController) CompleteLogout(context echo.Context) error {
 		})
 	}
 
-	err = services.Session.DeleteByUserId(tokenUserId)
+	err = services.Session.DeleteByUserID(tokenUserID)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{

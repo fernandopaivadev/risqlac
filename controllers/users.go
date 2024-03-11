@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"risqlac/application/models"
-	"risqlac/application/services"
+	"main/models"
+	"main/services"
 	"strconv"
 	"time"
 
@@ -38,7 +38,7 @@ func (*userController) Create(context echo.Context) error {
 		user.IsAdmin = 1
 	}
 
-	err = services.User.Create(user)
+	err = services.User.Create(&user)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -55,7 +55,7 @@ func (*userController) Create(context echo.Context) error {
 func (*userController) Update(context echo.Context) error {
 	headers := context.Request().Header
 	isAdmin := headers["Isadmin"][0] == "1"
-	tokenUserId, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
+	tokenUserID, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -74,7 +74,7 @@ func (*userController) Update(context echo.Context) error {
 		})
 	}
 
-	if !(isAdmin || tokenUserId == user.Id) {
+	if !(isAdmin || tokenUserID == user.ID) {
 		return context.JSON(403, echo.Map{
 			"message": "not allowed for not admin users",
 		})
@@ -96,7 +96,7 @@ func (*userController) Update(context echo.Context) error {
 		user.IsAdmin = 0
 	}
 
-	err = services.User.Update(user)
+	err = services.User.Update(&user)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -113,7 +113,7 @@ func (*userController) Update(context echo.Context) error {
 func (*userController) List(context echo.Context) error {
 	headers := context.Request().Header
 	isAdmin := headers["Isadmin"][0] == "1"
-	tokenUserId, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
+	tokenUserID, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -123,7 +123,7 @@ func (*userController) List(context echo.Context) error {
 	}
 
 	if !isAdmin {
-		user, err := services.User.GetById(tokenUserId)
+		user, err := services.User.GetByID(tokenUserID)
 
 		if err != nil {
 			return context.JSON(500, echo.Map{
@@ -137,10 +137,10 @@ func (*userController) List(context echo.Context) error {
 		})
 	}
 
-	userId, _ := strconv.ParseUint(context.QueryParam("id"), 10, 64)
+	userID, _ := strconv.ParseUint(context.QueryParam("id"), 10, 64)
 
-	if userId != 0 {
-		user, err := services.User.GetById(userId)
+	if userID != 0 {
+		user, err := services.User.GetByID(userID)
 
 		if err != nil {
 			return context.JSON(500, echo.Map{
@@ -171,7 +171,7 @@ func (*userController) List(context echo.Context) error {
 func (*userController) Delete(context echo.Context) error {
 	headers := context.Request().Header
 	isAdmin := headers["Isadmin"][0] == "1"
-	tokenUserId, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
+	tokenUserID, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -180,7 +180,7 @@ func (*userController) Delete(context echo.Context) error {
 		})
 	}
 
-	userId, err := strconv.ParseUint(context.QueryParam("id"), 10, 64)
+	userID, err := strconv.ParseUint(context.QueryParam("id"), 10, 64)
 
 	if err != nil {
 		return context.JSON(400, echo.Map{
@@ -189,13 +189,13 @@ func (*userController) Delete(context echo.Context) error {
 		})
 	}
 
-	if !(isAdmin || tokenUserId == userId) {
+	if !(isAdmin || tokenUserID == userID) {
 		return context.JSON(403, echo.Map{
 			"message": "not allowed for not admin users",
 		})
 	}
 
-	err = services.User.Delete(userId)
+	err = services.User.Delete(userID)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -231,7 +231,7 @@ func (*userController) RequestPasswordReset(context echo.Context) error {
 	passwordChangeToken := uuid.NewString()
 
 	err = services.Session.Create(&models.Session{
-		UserId:        user.Id,
+		UserID:        user.ID,
 		Token:         passwordChangeToken,
 		PasswordReset: 1,
 		ExpiresAt:     time.Now().Add(5 * time.Minute),
@@ -244,12 +244,12 @@ func (*userController) RequestPasswordReset(context echo.Context) error {
 		})
 	}
 
-	passwordResetUrl := "https://risqlac.com.br/#/reset-password?" + passwordChangeToken
+	passwordResetURL := "https://risqlac.com.br/#/reset-password?" + passwordChangeToken
 
-	err = services.Utils.SendEmail(
+	err = services.Mailing.SendEmail(
 		user.Email,
 		"Reset de senha",
-		"Link para o reset de senha: <a href=\""+passwordResetUrl+"\">"+passwordResetUrl+"</a>",
+		"Link para o reset de senha: <a href=\""+passwordResetURL+"\">"+passwordResetURL+"</a>",
 	)
 
 	if err != nil {
@@ -266,7 +266,7 @@ func (*userController) RequestPasswordReset(context echo.Context) error {
 
 func (*userController) ChangePassword(context echo.Context) error {
 	headers := context.Request().Header
-	tokenUserId, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
+	tokenUserID, err := strconv.ParseUint(headers["Userid"][0], 10, 64)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{
@@ -284,7 +284,7 @@ func (*userController) ChangePassword(context echo.Context) error {
 		})
 	}
 
-	err = services.User.ChangePassword(tokenUserId, newPassword)
+	err = services.User.ChangePassword(tokenUserID, newPassword)
 
 	if err != nil {
 		return context.JSON(500, echo.Map{

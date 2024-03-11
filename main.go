@@ -2,25 +2,25 @@ package main
 
 import (
 	"log"
-	"risqlac/application"
-	"risqlac/environment"
-	"risqlac/infrastructure"
+	"main/config"
+	"main/infra"
+	"main/server"
 )
 
 func main() {
-	environment.Load()
+	config.Env.Load()
 
-	err := infrastructure.Database.Connect()
+	err := infra.Database.Connect(config.Env.DatabaseFile)
 
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
 
-	application.Server.Setup()
-	application.Server.LoadApiRoutes("/api")
-	application.Server.LoadAppRoutes("")
+	server.HTTPServer.Setup()
+	server.HTTPServer.LoadAPIRoutes("/api")
+	server.HTTPServer.LoadAppRoutes("")
 
-	err = application.Server.Start()
+	err = server.HTTPServer.Start()
 
 	if err != nil {
 		log.Fatalln(err.Error())
