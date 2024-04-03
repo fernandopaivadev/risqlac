@@ -18,7 +18,7 @@
 		"@vitejs/plugin-react": "^4.2.1",
 		"npm-check-updates": "^16.14.17",
 		"typescript": "^5.4.2",
-		"vite": "^5.1.6",
+		"vite": "^5.1.7",
 		"web-vitals": "^3.5.2"
 	},
 	"scripts": {
