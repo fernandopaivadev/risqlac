@@ -3,7 +3,7 @@ module main
 go 1.22
 
 require (
-	github.com/go-playground/validator/v10 v10.19.0
+	github.com/go-playground/validator/v10 v10.20.0
 	github.com/google/uuid v1.6.0
 	github.com/johnfercher/maroto v1.0.0
 	github.com/joho/godotenv v1.5.1
@@ -11,7 +11,7 @@ require (
 	github.com/xuri/excelize/v2 v2.8.1
 	golang.org/x/crypto v0.22.0
 	gorm.io/driver/sqlite v1.5.5
-	gorm.io/gorm v1.25.9
+	gorm.io/gorm v1.25.10
 )
 
 require (
