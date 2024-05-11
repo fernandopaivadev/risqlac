@@ -1,33 +1,43 @@
 ARG APP_NAME=risqlac
 
-FROM node:latest as build
+# stage 1: build frontend
+FROM node:latest as build-frontend
 
-WORKDIR /usr/app
+WORKDIR /app
 COPY . .
 
-WORKDIR /usr/app/frontend
+WORKDIR /app/frontend
 RUN npm ci && \
 	npm run build
+#-----------------------------------
 
-FROM golang:latest as compile
+# stage2: build backend
+FROM golang:latest as build-backend
 
 ARG APP_NAME
 ENV APP_NAME=$APP_NAME
 ENV CGO_ENABLED=1
 
-COPY --from=build /usr/app /usr/app
-WORKDIR /usr/app
+COPY --from=build-frontend /app /app
+WORKDIR /app
 
 RUN	go mod download && \
 	go build -o $APP_NAME
+#-----------------------------------
 
+# final stage: run application
 FROM busybox:latest
+
+# create group and user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# switch to user
+USER appuser
 
 ARG APP_NAME
 ENV APP_NAME=$APP_NAME
 
-COPY --from=compile /usr/app /usr/app
-WORKDIR /usr/app
+COPY --from=build-backend /app /app
+WORKDIR /app
 
 EXPOSE 3000
 
